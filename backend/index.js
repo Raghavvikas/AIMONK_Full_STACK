@@ -27,20 +27,41 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: 'postgres',
 });
 
-// // Model definition
-// const Tree = sequelize.define('Tree', {
-//     name: {
-//         type: DataTypes.STRING,
-//         allowNull: false,
-//     },
-//     data: {
-//         type: DataTypes.JSONB,
-//         allowNull: false,
-//     },
-// });
+// Endpoint to save the tree data
+app.post('/api/saveTree', (req, res) => {
+    const treeData = req.body.data;
+
+    // Save to JSON file
+    saveToFile(treeData)
+        .then(() => res.status(200).send('Tree data saved successfully.'))
+        .catch((error) => {
+            console.error('Error saving tree data:', error);
+            res.status(500).send('Failed to save tree data.');
+        });
+});
+
+
+
+// Function to save the tree data to a JSON file
+const saveToFile = async (data) => {
+    const filePath = path.join(__dirname, 'treeData.json');
+
+    // Parse JSON string to object
+    const treeObject = JSON.parse(data);
+
+    // Write the object to a file
+    return new Promise((resolve, reject) => {
+        fs.writeFile(filePath, JSON.stringify(treeObject, null, 2), (err) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve();
+        });
+    });
+};
 
 // Sync the database
-sequelize.sync();
+// sequelize.sync();
 
 // Routes
 app.get('/api/tags', async (req, res) => {
