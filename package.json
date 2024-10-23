@@ -1,0 +1,13 @@
+{
+  "name": "aimonk_assignemnt",
+  "version": "1.0.0",
+  "scripts": {
+    "frontend": "cd frontend && npm start",
+    "backend": "cd backend && node index.js",
+    "dev": "concurrently \"npm run frontend\" \"npm run backend\""
+  },
+  "devDependencies": {
+    "ajv": "^7.2.4",
+    "concurrently": "^9.0.1"
+  }
+}
